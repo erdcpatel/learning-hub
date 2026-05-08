@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redis Reference – Learning Hub</title>
+  <meta name="description" content="Redis commands reference, data types, persistence, pub/sub, and caching patterns.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="page--redis">
+  <div id="bg-orbs-placeholder"></div>
+  <div id="nav-placeholder"></div>
+
+  <main class="main-content">
+    <div class="container">
+
+      <section class="hero" style="padding-bottom:32px;">
+        <h1 class="hero__title"><span class="hero__title-gradient">Redis</span></h1>
+        <p class="hero__subtitle">In-memory data structure store — database, cache, message broker, and streaming engine.</p>
+      </section>
+
+      <!-- Core Concepts -->
+      <section class="section reveal">
+        <div class="section__header">
+          <h2 class="section__title">Core Concepts</h2>
+        </div>
+        <div class="topic-grid">
+          <div class="card content-card">
+            <div class="content-card__title">⚡ In-Memory</div>
+            <div class="content-card__body">All data stored in RAM for sub-millisecond latency. Optionally persists to disk via RDB snapshots or AOF logs.</div>
+          </div>
+          <div class="card content-card">
+            <div class="content-card__title">🧩 Data Structures</div>
+            <div class="content-card__body">Native support for Strings, Hashes, Lists, Sets, Sorted Sets, Streams, Bitmaps, HyperLogLog, and Geospatial indexes.</div>
+          </div>
+          <div class="card content-card">
+            <div class="content-card__title">📡 Pub/Sub</div>
+            <div class="content-card__body">Built-in publish/subscribe messaging. Clients subscribe to channels and receive real-time messages. Fire-and-forget semantics.</div>
+          </div>
+          <div class="card content-card">
+            <div class="content-card__title">🔄 Replication</div>
+            <div class="content-card__body">Leader-follower replication with async sync. Redis Sentinel for HA. Redis Cluster for horizontal sharding across nodes.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- String Commands -->
+      <section class="section reveal">
+        <div class="section__header">
+          <h2 class="section__title">String Commands</h2>
+        </div>
+        <div class="card">
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Command</th><th>Description</th><th>Example</th></tr></thead>
+              <tbody>
+                <tr><td><code>SET</code></td><td>Set a key-value pair</td><td><code>SET user:1 "Alice"</code></td></tr>
+                <tr><td><code>GET</code></td><td>Get value by key</td><td><code>GET user:1</code></td></tr>
+                <tr><td><code>MSET</code></td><td>Set multiple keys</td><td><code>MSET k1 "v1" k2 "v2"</code></td></tr>
+                <tr><td><code>MGET</code></td><td>Get multiple values</td><td><code>MGET k1 k2</code></td></tr>
+                <tr><td><code>INCR</code></td><td>Increment integer value</td><td><code>INCR counter</code></td></tr>
+                <tr><td><code>DECR</code></td><td>Decrement integer value</td><td><code>DECR counter</code></td></tr>
+                <tr><td><code>SETEX</code></td><td>Set with expiry (seconds)</td><td><code>SETEX session 3600 "data"</code></td></tr>
+                <tr><td><code>SETNX</code></td><td>Set only if not exists</td><td><code>SETNX lock:res "owner1"</code></td></tr>
+                <tr><td><code>APPEND</code></td><td>Append to value</td><td><code>APPEND log "new entry"</code></td></tr>
+                <tr><td><code>STRLEN</code></td><td>Get string length</td><td><code>STRLEN user:1</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Hash Commands -->
+      <section class="section reveal">
+        <div class="section__header">
+          <h2 class="section__title">Hash Commands</h2>
+        </div>
+        <div class="card">
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Command</th><th>Description</th><th>Example</th></tr></thead>
+              <tbody>
+                <tr><td><code>HSET</code></td><td>Set hash field</td><td><code>HSET user:1 name "Alice"</code></td></tr>
+                <tr><td><code>HGET</code></td><td>Get hash field</td><td><code>HGET user:1 name</code></td></tr>
+                <tr><td><code>HMSET</code></td><td>Set multiple fields</td><td><code>HMSET user:1 name "Alice" age 30</code></td></tr>
+                <tr><td><code>HGETALL</code></td><td>Get all fields and values</td><td><code>HGETALL user:1</code></td></tr>
+                <tr><td><code>HDEL</code></td><td>Delete field</td><td><code>HDEL user:1 age</code></td></tr>
+                <tr><td><code>HEXISTS</code></td><td>Check if field exists</td><td><code>HEXISTS user:1 email</code></td></tr>
+                <tr><td><code>HINCRBY</code></td><td>Increment field value</td><td><code>HINCRBY user:1 visits 1</code></td></tr>
+                <tr><td><code>HKEYS</code></td><td>Get all field names</td><td><code>HKEYS user:1</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- List Commands -->
+      <section class="section reveal">
+        <div class="section__header">
+          <h2 class="section__title">List Commands</h2>
+        </div>
+        <div class="card">
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Command</th><th>Description</th><th>Example</th></tr></thead>
+              <tbody>
+                <tr><td><code>LPUSH</code></td><td>Push to head</td><td><code>LPUSH queue "task1"</code></td></tr>
+                <tr><td><code>RPUSH</code></td><td>Push to tail</td><td><code>RPUSH queue "task2"</code></td></tr>
+                <tr><td><code>LPOP</code></td><td>Pop from head</td><td><code>LPOP queue</code></td></tr>
+                <tr><td><code>RPOP</code></td><td>Pop from tail</td><td><code>RPOP queue</code></td></tr>
+                <tr><td><code>LRANGE</code></td><td>Get range of elements</td><td><code>LRANGE queue 0 -1</code></td></tr>
+                <tr><td><code>LLEN</code></td><td>Get list length</td><td><code>LLEN queue</code></td></tr>
+                <tr><td><code>LINDEX</code></td><td>Get element by index</td><td><code>LINDEX queue 0</code></td></tr>
+                <tr><td><code>BRPOP</code></td><td>Blocking pop from tail</td><td><code>BRPOP queue 30</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Set & Sorted Set -->
+      <section class="section reveal">
+        <div class="section__header">
+          <h2 class="section__title">Set & Sorted Set Commands</h2>
+        </div>
+        <div class="card">
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Command</th><th>Description</th><th>Example</th></tr></thead>
+              <tbody>
+                <tr><td><code>SADD</code></td><td>Add to set</td><td><code>SADD tags "redis" "nosql"</code></td></tr>
+                <tr><td><code>SMEMBERS</code></td><td>Get all members</td><td><code>SMEMBERS tags</code></td></tr>
+                <tr><td><code>SISMEMBER</code></td><td>Check membership</td><td><code>SISMEMBER tags "redis"</code></td></tr>
+                <tr><td><code>SINTER</code></td><td>Intersection of sets</td><td><code>SINTER set1 set2</code></td></tr>
+                <tr><td><code>SUNION</code></td><td>Union of sets</td><td><code>SUNION set1 set2</code></td></tr>
+                <tr><td><code>ZADD</code></td><td>Add to sorted set</td><td><code>ZADD leaderboard 100 "player1"</code></td></tr>
+                <tr><td><code>ZRANGE</code></td><td>Get range by rank</td><td><code>ZRANGE leaderboard 0 9</code></td></tr>
+                <tr><td><code>ZRANGEBYSCORE</code></td><td>Get range by score</td><td><code>ZRANGEBYSCORE lb 50 100</code></td></tr>
+                <tr><td><code>ZRANK</code></td><td>Get member rank</td><td><code>ZRANK leaderboard "player1"</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Common Patterns -->
+      <section class="section reveal">
+        <div class="section__header">
+          <h2 class="section__title">Common Patterns</h2>
+        </div>
+        <div class="topic-grid">
+          <div class="card content-card">
+            <div class="content-card__title">🗄️ Cache-Aside</div>
+            <div class="content-card__body">
+              Check Redis first. On miss, query DB, then write to Redis with TTL.
+              <div class="code-block"><pre><code>GET cache:user:1
+// miss → query DB → SET cache:user:1 "data" EX 3600</code></pre></div>
+            </div>
+          </div>
+          <div class="card content-card">
+            <div class="content-card__title">🔒 Distributed Lock</div>
+            <div class="content-card__body">
+              Use <code>SET NX EX</code> for mutual exclusion across processes.
+              <div class="code-block"><pre><code>SET lock:resource "owner" NX EX 30
+// Do work...
+DEL lock:resource</code></pre></div>
+            </div>
+          </div>
+          <div class="card content-card">
+            <div class="content-card__title">⏱️ Rate Limiting</div>
+            <div class="content-card__body">
+              Use <code>INCR</code> with <code>EXPIRE</code> for sliding window rate limiting.
+              <div class="code-block"><pre><code>INCR ratelimit:user:1
+EXPIRE ratelimit:user:1 60
+// Check if count > threshold</code></pre></div>
+            </div>
+          </div>
+          <div class="card content-card">
+            <div class="content-card__title">📊 Leaderboard</div>
+            <div class="content-card__body">
+              Sorted sets are perfect for leaderboards with O(log N) operations.
+              <div class="code-block"><pre><code>ZADD leaderboard 1500 "player1"
+ZREVRANGE leaderboard 0 9 WITHSCORES</code></pre></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Persistence -->
+      <section class="section reveal">
+        <div class="section__header">
+          <h2 class="section__title">Persistence Options</h2>
+        </div>
+        <div class="card content-card">
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Method</th><th>How It Works</th><th>Trade-off</th></tr></thead>
+              <tbody>
+                <tr><td><strong>RDB</strong></td><td>Point-in-time snapshots at intervals</td><td>Fast restart, possible data loss between snapshots</td></tr>
+                <tr><td><strong>AOF</strong></td><td>Logs every write command</td><td>More durable, larger files, slower restart</td></tr>
+                <tr><td><strong>RDB + AOF</strong></td><td>Combined — AOF for durability, RDB for fast recovery</td><td>Recommended for production</td></tr>
+                <tr><td><strong>No persistence</strong></td><td>Pure cache, data lost on restart</td><td>Best performance, no durability</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+  <script src="js/search-data.js"></script>
+  <script src="js/common.js"></script>
+</body>
+</html>

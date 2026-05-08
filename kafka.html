@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kafka Deep Dive – Learning Hub</title>
+  <meta name="description" content="Comprehensive Apache Kafka learning material – event streaming concepts, architecture deep dive, partitions, and producer/consumer mechanics.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="page--kafka">
+  <div id="bg-orbs-placeholder"></div>
+  <div id="nav-placeholder"></div>
+
+  <main class="main-content">
+    <div class="container">
+
+      <section class="hero" style="padding-bottom:32px;">
+        <h1 class="hero__title"><span class="hero__title-gradient">Apache Kafka</span></h1>
+        <p class="hero__subtitle">The digital equivalent of a central nervous system for your data. A highly scalable, fault-tolerant distributed event streaming platform.</p>
+      </section>
+
+      <!-- What is Event Streaming -->
+      <section class="section reveal">
+        <div class="section__header">
+          <h2 class="section__title">1. What is Event Streaming?</h2>
+        </div>
+        <div class="card content-card">
+          <div class="content-card__body">
+            <p>Event streaming is the practice of capturing data in real-time from event sources like databases, sensors, mobile devices, cloud services, and software applications in the form of <strong>streams of events</strong>.</p>
+            <p>Technically, Kafka combines three key capabilities:</p>
+            <ul>
+              <li><strong>Publish and Subscribe:</strong> Read and write streams of events.</li>
+              <li><strong>Storage:</strong> Store streams of events durably and reliably for as long as you want.</li>
+              <li><strong>Processing:</strong> Process streams of events as they occur or retrospectively.</li>
+            </ul>
+            <p>An <strong>event</strong> records the fact that "something happened" in the world or in your business. Conceptually, it consists of:</p>
+            <ul>
+              <li><strong>Key:</strong> (Optional) Used for routing, e.g., "Alice"</li>
+              <li><strong>Value:</strong> The actual data, e.g., "Made a payment of $200 to Bob"</li>
+              <li><strong>Timestamp:</strong> When the event occurred</li>
+              <li><strong>Headers:</strong> (Optional) Metadata key-value pairs</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Architecture Overview -->
+      <section class="section reveal">
+        <div class="section__header">
+          <h2 class="section__title">2. Architecture Overview</h2>
+          <p class="section__subtitle">Understanding how Brokers, Topics, Producers, and Consumers interact.</p>
+        </div>
+        
+        <div class="card content-card text-center mb-3">
+          <img src="images/kafka-architecture.png" alt="Kafka Cluster Architecture showing Brokers, Partitions, Producers, and Consumers" style="max-width: 100%; border-radius: var(--radius-md); border: 1px solid var(--glass-border);">
+          <p class="text-muted mt-1" style="font-size: 0.85rem;">Figure 1: High-level Kafka Architecture. Producers write to topics, and Consumers within a Consumer Group read from them. Data is partitioned across multiple Brokers.</p>
+        </div>
+
+        <div class="topic-grid">
+          <div class="card content-card">
+            <div class="content-card__title">🖥️ Brokers & Cluster</div>
+            <div class="content-card__body">
+              <p>Kafka runs as a cluster of one or more servers called <strong>Brokers</strong>. These servers form the storage layer.</p>
+              <p>The cluster is highly scalable and fault-tolerant. If a broker fails, other brokers take over its work to ensure continuous operation without data loss. Historically managed by ZooKeeper, Kafka is moving towards KRaft (Kafka Raft) for self-managed metadata quorum.</p>
+            </div>
+          </div>
+          <div class="card content-card">
+            <div class="content-card__title">📮 Topics</div>
+            <div class="content-card__body">
+              <p>Events are organized and durably stored in <strong>Topics</strong>. Think of a topic as a category or feed name. </p>
+              <p>Topics in Kafka are multi-producer and multi-subscriber. Events in a topic are not deleted after consumption; instead, Kafka retains them based on a configured time (e.g., 7 days) or size limit.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Partitions Deep Dive -->
+      <section class="section reveal">
+        <div class="section__header">
+          <h2 class="section__title">3. Partitions Deep Dive</h2>
+          <p class="section__subtitle">The secret to Kafka's massive scalability and ordered processing.</p>
+        </div>
+
+        <div class="card content-card text-center mb-3">
+          <img src="images/kafka-partitions.png" alt="Internals of Kafka Partitions showing sequential offsets and append-only writes" style="max-width: 100%; border-radius: var(--radius-md); border: 1px solid var(--glass-border);">
+          <p class="text-muted mt-1" style="font-size: 0.85rem;">Figure 2: Internals of a Kafka Topic. It is divided into multiple partitions. Events with the same key go to the same partition, guaranteeing order.</p>
+        </div>
+
+        <div class="card content-card">
+          <div class="content-card__body">
+            <p>Topics are <strong>partitioned</strong>, meaning a topic is spread over a number of "buckets" located on different Kafka brokers. This distributed placement allows client applications to read and write data from many brokers simultaneously.</p>
+            
+            <h3>How Partitions Work:</h3>
+            <ul>
+              <li><strong>Append-Only:</strong> When a new event is published, it is appended to the end of one of the topic's partitions. It is an immutable log.</li>
+              <li><strong>Offsets:</strong> Each event in a partition receives a sequential ID number called an <strong>offset</strong>. The offset uniquely identifies an event within a partition.</li>
+              <li><strong>Ordering:</strong> Kafka only guarantees the order of events <em>within a single partition</em>, not across the entire topic.</li>
+              <li><strong>Key-Based Routing:</strong> If an event has a key (e.g., "user-A"), a hash of that key determines the partition. This guarantees that all events for "user-A" end up in the exact same partition, ensuring ordered processing for that specific entity.</li>
+            </ul>
+
+            <h3>Replication:</h3>
+            <p>For fault tolerance, every topic partition can be replicated across multiple brokers. A replication factor of 3 means there are 3 copies of the data.</p>
+            <ul>
+              <li><strong>Leader:</strong> One replica acts as the leader. All read and write requests for that partition go through the leader.</li>
+              <li><strong>Followers:</strong> The other replicas passively replicate the leader's data. If the leader fails, a follower automatically becomes the new leader.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Producer & Consumer Mechanics -->
+      <section class="section reveal">
+        <div class="section__header">
+          <h2 class="section__title">4. Producers and Consumers</h2>
+        </div>
+        
+        <div class="topic-grid">
+          <div class="card content-card">
+            <div class="content-card__title">📤 Producers</div>
+            <div class="content-card__body">
+              <p>Producers publish events to topics. They automatically know which broker and partition to write to. Delivery semantics can be tuned:</p>
+              <ul>
+                <li><strong>Fire-and-forget:</strong> Fast, but risks data loss (acks=0).</li>
+                <li><strong>Leader acknowledgment:</strong> Waits for the leader to write the data (acks=1).</li>
+                <li><strong>Full acknowledgment:</strong> Waits for the leader and all in-sync replicas to write the data (acks=all). Safest.</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="card content-card">
+            <div class="content-card__title">📥 Consumers & Consumer Groups</div>
+            <div class="content-card__body">
+              <p>Consumers read events from topics. They are organized into <strong>Consumer Groups</strong>.</p>
+              <ul>
+                <li>A consumer group acts as a single logical subscriber.</li>
+                <li>Each partition in a topic is consumed by <strong>exactly one</strong> consumer within the group.</li>
+                <li>If you have more consumers than partitions, some consumers will sit idle. This is how Kafka scales consumption horizontally.</li>
+                <li>Consumers track their progress by committing their current <strong>offset</strong> back to Kafka.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Practical Use Cases -->
+      <section class="section reveal">
+        <div class="section__header">
+          <h2 class="section__title">5. When to Use Kafka</h2>
+        </div>
+        <div class="topic-grid">
+          <div class="card content-card">
+            <div class="content-card__title">📊 Event Sourcing & CQRS</div>
+            <div class="content-card__body">Storing all state changes as an immutable sequence of events. Applications can rebuild their state by replaying the log.</div>
+          </div>
+          <div class="card content-card">
+            <div class="content-card__title">📝 Log Aggregation</div>
+            <div class="content-card__body">Collecting application logs from hundreds of microservices and routing them to a centralized search engine like Elasticsearch.</div>
+          </div>
+          <div class="card content-card">
+            <div class="content-card__title">🔄 Real-time Analytics</div>
+            <div class="content-card__body">Using tools like Kafka Streams or Apache Flink to process streams of data (e.g., fraud detection, real-time recommendations).</div>
+          </div>
+          <div class="card content-card">
+            <div class="content-card__title">🌉 Microservices Communication</div>
+            <div class="content-card__body">Decoupling services by using asynchronous, event-driven communication rather than synchronous REST APIs.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Reference: CLI Commands -->
+      <section class="section reveal">
+        <div class="section__header">
+          <h2 class="section__title">Reference: Essential CLI Commands</h2>
+          <p class="section__subtitle">Quick reference for common administrative tasks.</p>
+        </div>
+        <div class="card">
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Task</th><th>Command Example</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Create a topic</strong></td><td><code>kafka-topics.sh --create --topic my-topic --partitions 3 --replication-factor 2 --bootstrap-server localhost:9092</code></td></tr>
+                <tr><td><strong>List topics</strong></td><td><code>kafka-topics.sh --list --bootstrap-server localhost:9092</code></td></tr>
+                <tr><td><strong>Describe a topic</strong></td><td><code>kafka-topics.sh --describe --topic my-topic --bootstrap-server localhost:9092</code></td></tr>
+                <tr><td><strong>Produce messages</strong></td><td><code>kafka-console-producer.sh --topic my-topic --bootstrap-server localhost:9092</code></td></tr>
+                <tr><td><strong>Consume messages</strong></td><td><code>kafka-console-consumer.sh --topic my-topic --from-beginning --bootstrap-server localhost:9092</code></td></tr>
+                <tr><td><strong>Check consumer lag</strong></td><td><code>kafka-consumer-groups.sh --describe --group my-group --bootstrap-server localhost:9092</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+  <script src="js/search-data.js"></script>
+  <script src="js/common.js"></script>
+</body>
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elasticsearch Reference – Learning Hub</title>
+  <meta name="description" content="Elasticsearch reference – REST API, Query DSL, mappings, aggregations, and index management.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="page--elasticsearch">
+  <div id="bg-orbs-placeholder"></div>
+  <div id="nav-placeholder"></div>
+
+  <main class="main-content">
+    <div class="container">
+
+      <section class="hero" style="padding-bottom:32px;">
+        <h1 class="hero__title"><span class="hero__title-gradient">Elasticsearch</span></h1>
+        <p class="hero__subtitle">Distributed search and analytics engine — full-text search, log analysis, and real-time insights.</p>
+      </section>
+
+      <!-- Core Concepts -->
+      <section class="section reveal">
+        <div class="section__header">
+          <h2 class="section__title">Core Concepts</h2>
+        </div>
+        <div class="topic-grid">
+          <div class="card content-card">
+            <div class="content-card__title">📄 Index</div>
+            <div class="content-card__body">A collection of documents with similar characteristics. Analogous to a database table. Each index has mappings and settings.</div>
+          </div>
+          <div class="card content-card">
+            <div class="content-card__title">📋 Document</div>
+            <div class="content-card__body">A JSON object stored in an index. The basic unit of information. Each document has a unique <code>_id</code>.</div>
+          </div>
+          <div class="card content-card">
+            <div class="content-card__title">🗺️ Mapping</div>
+            <div class="content-card__body">Schema definition for an index — field types (text, keyword, integer, date), analyzers, and indexing options.</div>
+          </div>
+          <div class="card content-card">
+            <div class="content-card__title">🔀 Shard</div>
+            <div class="content-card__body">An index is split into shards for horizontal scaling. Each shard is a Lucene index. Replicas provide fault tolerance.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CRUD Operations -->
+      <section class="section reveal">
+        <div class="section__header">
+          <h2 class="section__title">CRUD Operations</h2>
+        </div>
+        <div class="card">
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Operation</th><th>Method</th><th>Endpoint</th></tr></thead>
+              <tbody>
+                <tr><td>Create index</td><td><code>PUT</code></td><td><code>/my-index</code></td></tr>
+                <tr><td>Delete index</td><td><code>DELETE</code></td><td><code>/my-index</code></td></tr>
+                <tr><td>Index document</td><td><code>POST</code></td><td><code>/my-index/_doc</code></td></tr>
+                <tr><td>Index with ID</td><td><code>PUT</code></td><td><code>/my-index/_doc/1</code></td></tr>
+                <tr><td>Get document</td><td><code>GET</code></td><td><code>/my-index/_doc/1</code></td></tr>
+                <tr><td>Update document</td><td><code>POST</code></td><td><code>/my-index/_update/1</code></td></tr>
+                <tr><td>Delete document</td><td><code>DELETE</code></td><td><code>/my-index/_doc/1</code></td></tr>
+                <tr><td>Bulk operations</td><td><code>POST</code></td><td><code>/_bulk</code></td></tr>
+                <tr><td>Search</td><td><code>GET/POST</code></td><td><code>/my-index/_search</code></td></tr>
+                <tr><td>Count</td><td><code>GET</code></td><td><code>/my-index/_count</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Query DSL -->
+      <section class="section reveal">
+        <div class="section__header">
+          <h2 class="section__title">Query DSL Examples</h2>
+        </div>
+        <div class="topic-grid">
+          <div class="card content-card">
+            <div class="content-card__title">🔍 Match Query</div>
+            <div class="content-card__body">
+              Full-text search with analyzer:
+              <div class="code-block"><pre><code>GET /articles/_search
+{
+  "query": {
+    "match": {
+      "title": "elasticsearch guide"
+    }
+  }
+}</code></pre></div>
+            </div>
+          </div>
+          <div class="card content-card">
+            <div class="content-card__title">🎯 Bool Query</div>
+            <div class="content-card__body">
+              Combine multiple conditions:
+              <div class="code-block"><pre><code>GET /products/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        { "match": { "title": "laptop" } }
+      ],
+      "filter": [
+        { "range": { "price": { "lte": 1000 } } },
+        { "term": { "status": "active" } }
+      ],
+      "must_not": [
+        { "term": { "brand": "excluded" } }
+      ]
+    }
+  }
+}</code></pre></div>
+            </div>
+          </div>
+          <div class="card content-card">
+            <div class="content-card__title">📏 Range Query</div>
+            <div class="content-card__body">
+              Filter by numeric or date range:
+              <div class="code-block"><pre><code>GET /logs/_search
+{
+  "query": {
+    "range": {
+      "@timestamp": {
+        "gte": "now-1h",
+        "lte": "now"
+      }
+    }
+  }
+}</code></pre></div>
+            </div>
+          </div>
+          <div class="card content-card">
+            <div class="content-card__title">🔗 Nested Query</div>
+            <div class="content-card__body">
+              Query nested objects:
+              <div class="code-block"><pre><code>GET /orders/_search
+{
+  "query": {
+    "nested": {
+      "path": "items",
+      "query": {
+        "bool": {
+          "must": [
+            { "match": { "items.name": "widget" } },
+            { "range": { "items.qty": { "gte": 5 } } }
+          ]
+        }
+      }
+    }
+  }
+}</code></pre></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Aggregations -->
+      <section class="section reveal">
+        <div class="section__header">
+          <h2 class="section__title">Aggregations</h2>
+        </div>
+        <div class="card content-card">
+          <div class="content-card__body">
+            <div class="code-block"><pre><code>GET /orders/_search
+{
+  "size": 0,
+  "aggs": {
+    "sales_per_month": {
+      "date_histogram": {
+        "field": "order_date",
+        "calendar_interval": "month"
+      },
+      "aggs": {
+        "total_revenue": {
+          "sum": { "field": "amount" }
+        },
+        "avg_order_value": {
+          "avg": { "field": "amount" }
+        }
+      }
+    },
+    "top_categories": {
+      "terms": {
+        "field": "category.keyword",
+        "size": 10
+      }
+    }
+  }
+}</code></pre></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Mapping Example -->
+      <section class="section reveal">
+        <div class="section__header">
+          <h2 class="section__title">Mapping & Analyzers</h2>
+        </div>
+        <div class="card content-card">
+          <div class="content-card__body">
+            <div class="code-block"><pre><code>PUT /articles
+{
+  "settings": {
+    "number_of_shards": 3,
+    "number_of_replicas": 1,
+    "analysis": {
+      "analyzer": {
+        "custom_analyzer": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": ["lowercase", "stop", "snowball"]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "title":     { "type": "text", "analyzer": "custom_analyzer" },
+      "slug":      { "type": "keyword" },
+      "body":      { "type": "text" },
+      "author":    { "type": "keyword" },
+      "published": { "type": "date" },
+      "views":     { "type": "integer" },
+      "tags":      { "type": "keyword" },
+      "location":  { "type": "geo_point" }
+    }
+  }
+}</code></pre></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Cluster Health -->
+      <section class="section reveal">
+        <div class="section__header">
+          <h2 class="section__title">Cluster Management</h2>
+        </div>
+        <div class="card">
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Endpoint</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td><code>GET /_cluster/health</code></td><td>Cluster health (green/yellow/red)</td></tr>
+                <tr><td><code>GET /_cat/indices?v</code></td><td>List all indices with stats</td></tr>
+                <tr><td><code>GET /_cat/nodes?v</code></td><td>List cluster nodes</td></tr>
+                <tr><td><code>GET /_cat/shards?v</code></td><td>Shard allocation details</td></tr>
+                <tr><td><code>GET /_cat/allocation?v</code></td><td>Disk usage per node</td></tr>
+                <tr><td><code>POST /my-index/_refresh</code></td><td>Refresh index (make recent docs searchable)</td></tr>
+                <tr><td><code>POST /my-index/_forcemerge</code></td><td>Merge segments for performance</td></tr>
+                <tr><td><code>PUT /my-index/_settings</code></td><td>Update index settings dynamically</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+  <script src="js/search-data.js"></script>
+  <script src="js/common.js"></script>
+</body>
+</html>

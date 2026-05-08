@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Helm Reference – Learning Hub</title>
+  <meta name="description" content="Helm charts reference – commands, chart structure, templating, values, and lifecycle management.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="page--helm">
+  <div id="bg-orbs-placeholder"></div>
+  <div id="nav-placeholder"></div>
+
+  <main class="main-content">
+    <div class="container">
+
+      <section class="hero" style="padding-bottom:32px;">
+        <h1 class="hero__title"><span class="hero__title-gradient">Helm</span></h1>
+        <p class="hero__subtitle">The package manager for Kubernetes — manage, template, and deploy applications with charts.</p>
+      </section>
+
+      <!-- Core Concepts -->
+      <section class="section reveal">
+        <div class="section__header">
+          <h2 class="section__title">Core Concepts</h2>
+        </div>
+        <div class="topic-grid">
+          <div class="card content-card">
+            <div class="content-card__title">📦 Chart</div>
+            <div class="content-card__body">A package of pre-configured Kubernetes resources. Contains templates, default values, and metadata.</div>
+          </div>
+          <div class="card content-card">
+            <div class="content-card__title">🚀 Release</div>
+            <div class="content-card__body">An instance of a chart running in a cluster. Each install creates a new release with its own name and revision history.</div>
+          </div>
+          <div class="card content-card">
+            <div class="content-card__title">📂 Repository</div>
+            <div class="content-card__body">A server that hosts packaged charts. Add repos to discover and install community charts (e.g., Bitnami, stable).</div>
+          </div>
+          <div class="card content-card">
+            <div class="content-card__title">📝 Values</div>
+            <div class="content-card__body">Configuration parameters that customize chart behavior. Override defaults via <code>-f values.yaml</code> or <code>--set key=value</code>.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Essential Commands -->
+      <section class="section reveal">
+        <div class="section__header">
+          <h2 class="section__title">Essential Commands</h2>
+        </div>
+        <div class="card">
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Command</th><th>Description</th><th>Example</th></tr></thead>
+              <tbody>
+                <tr><td><code>helm install</code></td><td>Install a chart</td><td><code>helm install my-app ./chart -f values.yaml</code></td></tr>
+                <tr><td><code>helm upgrade</code></td><td>Upgrade a release</td><td><code>helm upgrade my-app ./chart --set image.tag=v2</code></td></tr>
+                <tr><td><code>helm rollback</code></td><td>Rollback to revision</td><td><code>helm rollback my-app 1</code></td></tr>
+                <tr><td><code>helm uninstall</code></td><td>Remove a release</td><td><code>helm uninstall my-app</code></td></tr>
+                <tr><td><code>helm list</code></td><td>List releases</td><td><code>helm list -A</code></td></tr>
+                <tr><td><code>helm status</code></td><td>Show release status</td><td><code>helm status my-app</code></td></tr>
+                <tr><td><code>helm history</code></td><td>Release revision history</td><td><code>helm history my-app</code></td></tr>
+                <tr><td><code>helm template</code></td><td>Render templates locally</td><td><code>helm template my-app ./chart</code></td></tr>
+                <tr><td><code>helm lint</code></td><td>Validate chart</td><td><code>helm lint ./chart</code></td></tr>
+                <tr><td><code>helm package</code></td><td>Package chart as .tgz</td><td><code>helm package ./chart</code></td></tr>
+                <tr><td><code>helm repo add</code></td><td>Add chart repository</td><td><code>helm repo add bitnami https://charts.bitnami.com/bitnami</code></td></tr>
+                <tr><td><code>helm repo update</code></td><td>Update repo index</td><td><code>helm repo update</code></td></tr>
+                <tr><td><code>helm search repo</code></td><td>Search charts in repos</td><td><code>helm search repo nginx</code></td></tr>
+                <tr><td><code>helm show values</code></td><td>Show chart defaults</td><td><code>helm show values bitnami/nginx</code></td></tr>
+                <tr><td><code>helm diff</code></td><td>Preview upgrade changes</td><td><code>helm diff upgrade my-app ./chart</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Chart Structure -->
+      <section class="section reveal">
+        <div class="section__header">
+          <h2 class="section__title">Chart Structure</h2>
+        </div>
+        <div class="card content-card">
+          <div class="code-block">
+<pre><code>my-chart/
+├── Chart.yaml          # Chart metadata (name, version, appVersion)
+├── Chart.lock          # Dependency lock file
+├── values.yaml         # Default configuration values
+├── values.schema.json  # JSON schema for values validation
+├── templates/
+│   ├── _helpers.tpl    # Reusable template partials
+│   ├── deployment.yaml # Kubernetes Deployment
+│   ├── service.yaml    # Kubernetes Service
+│   ├── ingress.yaml    # Ingress resource
+│   ├── hpa.yaml        # Horizontal Pod Autoscaler
+│   ├── configmap.yaml  # ConfigMap
+│   ├── secret.yaml     # Secret
+│   ├── NOTES.txt       # Post-install usage notes
+│   └── tests/
+│       └── test-connection.yaml
+├── charts/             # Sub-chart dependencies
+└── .helmignore         # Files to exclude from packaging</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- Templating -->
+      <section class="section reveal">
+        <div class="section__header">
+          <h2 class="section__title">Templating Basics</h2>
+        </div>
+        <div class="topic-grid">
+          <div class="card content-card">
+            <div class="content-card__title">{{ .Values.* }}</div>
+            <div class="content-card__body">
+              Access values from <code>values.yaml</code>:
+              <div class="code-block"><pre><code>image: {{ .Values.image.repository }}:{{ .Values.image.tag }}</code></pre></div>
+            </div>
+          </div>
+          <div class="card content-card">
+            <div class="content-card__title">{{ .Release.* }}</div>
+            <div class="content-card__body">
+              Built-in release info:
+              <div class="code-block"><pre><code>name: {{ .Release.Name }}
+namespace: {{ .Release.Namespace }}
+revision: {{ .Release.Revision }}</code></pre></div>
+            </div>
+          </div>
+          <div class="card content-card">
+            <div class="content-card__title">Control Flow</div>
+            <div class="content-card__body">
+              Conditionals and loops:
+              <div class="code-block"><pre><code>{{- if .Values.ingress.enabled }}
+  # render ingress
+{{- end }}
+
+{{- range .Values.env }}
+- name: {{ .name }}
+  value: {{ .value | quote }}
+{{- end }}</code></pre></div>
+            </div>
+          </div>
+          <div class="card content-card">
+            <div class="content-card__title">Helper Functions</div>
+            <div class="content-card__body">
+              Define in <code>_helpers.tpl</code>:
+              <div class="code-block"><pre><code>{{- define "mychart.fullname" -}}
+{{ .Release.Name }}-{{ .Chart.Name }}
+{{- end }}
+
+# Usage:
+name: {{ include "mychart.fullname" . }}</code></pre></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Lifecycle & Hooks -->
+      <section class="section reveal">
+        <div class="section__header">
+          <h2 class="section__title">Lifecycle & Hooks</h2>
+        </div>
+        <div class="card content-card">
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Hook</th><th>When It Runs</th><th>Use Case</th></tr></thead>
+              <tbody>
+                <tr><td><code>pre-install</code></td><td>Before resources are created</td><td>DB migrations, secrets setup</td></tr>
+                <tr><td><code>post-install</code></td><td>After all resources are created</td><td>Notifications, smoke tests</td></tr>
+                <tr><td><code>pre-upgrade</code></td><td>Before upgrade begins</td><td>Backups, validation</td></tr>
+                <tr><td><code>post-upgrade</code></td><td>After upgrade completes</td><td>Cache warming, health checks</td></tr>
+                <tr><td><code>pre-rollback</code></td><td>Before rollback</td><td>State preservation</td></tr>
+                <tr><td><code>post-rollback</code></td><td>After rollback</td><td>Cleanup, notifications</td></tr>
+                <tr><td><code>pre-delete</code></td><td>Before uninstall</td><td>Data export, cleanup</td></tr>
+                <tr><td><code>post-delete</code></td><td>After uninstall</td><td>External resource cleanup</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Best Practices -->
+      <section class="section reveal">
+        <div class="section__header">
+          <h2 class="section__title">Best Practices</h2>
+        </div>
+        <div class="topic-grid">
+          <div class="card content-card">
+            <div class="content-card__title">✅ Do</div>
+            <div class="content-card__body">
+              <ul style="list-style:none; padding:0;">
+                <li>• Use <code>helm template</code> before installing</li>
+                <li>• Pin chart versions in CI/CD</li>
+                <li>• Use <code>values.schema.json</code> for validation</li>
+                <li>• Namespace your releases</li>
+                <li>• Use <code>--atomic</code> for auto-rollback on failure</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card content-card">
+            <div class="content-card__title">❌ Don't</div>
+            <div class="content-card__body">
+              <ul style="list-style:none; padding:0;">
+                <li>• Don't hardcode values in templates</li>
+                <li>• Don't skip <code>helm lint</code> in CI</li>
+                <li>• Don't use <code>latest</code> image tags</li>
+                <li>• Don't store secrets in <code>values.yaml</code></li>
+                <li>• Don't modify releases manually with <code>kubectl</code></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+  <script src="js/search-data.js"></script>
+  <script src="js/common.js"></script>
+</body>
+</html>
