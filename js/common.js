@@ -577,6 +577,41 @@ if (localStorage.getItem('lh_theme') === 'light') {
     }
   }
 
+  /* --- Anchor Links --- */
+  function initAnchorLinks() {
+    var sections = document.querySelectorAll('section[id]');
+    for (var i = 0; i < sections.length; i++) {
+      var section = sections[i];
+      var title = section.querySelector('.section__title');
+      if (title && !title.querySelector('.anchor-link-btn')) {
+        var btn = document.createElement('button');
+        btn.className = 'anchor-link-btn';
+        btn.innerHTML = '🔗';
+        btn.setAttribute('title', 'Copy link to this section');
+        btn.setAttribute('data-id', section.id);
+        
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          var id = this.getAttribute('data-id');
+          var url = window.location.origin + window.location.pathname + '#' + id;
+          
+          navigator.clipboard.writeText(url).then(function() {
+            var originalText = e.target.innerHTML;
+            e.target.innerHTML = '✓';
+            setTimeout(function() {
+              e.target.innerHTML = originalText;
+            }, 2000);
+          }).catch(function(err) {
+            console.error('Failed to copy link: ', err);
+          });
+        });
+        
+        title.appendChild(btn);
+      }
+    }
+  }
+
   /* --- Initialize Everything --- */
   function init() {
     buildOrbs();
@@ -585,6 +620,7 @@ if (localStorage.getItem('lh_theme') === 'light') {
     buildFooter();
     initCodeCopyButtons();
     initInteractiveUI();
+    initAnchorLinks();
     setTimeout(initScrollReveal, 100);
   }
 

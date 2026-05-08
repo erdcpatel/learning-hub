@@ -1190,6 +1190,24 @@ td code {
   background: rgba(245, 158, 11, 0.1);
 }
 
+/* Anchor Link Button */
+.anchor-link-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  opacity: 0.3;
+  transition: var(--transition-fast);
+  margin-left: 8px;
+  font-size: 1.1rem;
+  padding: 0 4px;
+}
+.section__title:hover .anchor-link-btn,
+.anchor-link-btn:hover {
+  opacity: 1;
+  color: var(--accent-cyan);
+}
+
 /* Mark as Read Button */
 .mark-read-btn {
   background: var(--glass-bg);
