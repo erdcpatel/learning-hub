@@ -48,6 +48,13 @@ if (localStorage.getItem('lh_theme') === 'light') {
     html += '<span class="nav__search-shortcut">⌘K</span>';
     html += '</button>';
 
+    // Local Search Input (hidden by default, shown on content pages)
+    html += '<div class="nav__local-search" id="nav-local-search-container" style="display:none; position:relative; margin-left:16px; flex:1; max-width:250px;">';
+    html += '<span class="nav__local-search-icon" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--text-muted); pointer-events:none; font-size:0.8rem;">🔍</span>';
+    html += '<input type="search" class="nav__local-search-input" id="local-search" placeholder="Search page..." style="width:100%; padding:6px 14px 6px 32px; background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:var(--radius-full); color:var(--text-primary); font-size:0.85rem; outline:none; transition:var(--transition-fast);">';
+    html += '<span class="nav__local-search-shortcut" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); font-size:0.7rem; color:var(--text-muted); opacity:0.6; pointer-events:none;">/</span>';
+    html += '</div>';
+
     // Theme toggle button
     html += '<button class="nav__theme-btn" id="nav-theme-btn" aria-label="Toggle Light/Dark Theme" style="background:transparent; border:none; color:var(--text-primary); cursor:pointer; margin-left:16px; font-size:1.2rem;">';
     html += document.body.classList.contains('theme-light') ? '🌙' : '☀️';
@@ -616,19 +623,13 @@ if (localStorage.getItem('lh_theme') === 'light') {
   /* --- Local Search --- */
   function initLocalSearch() {
     var sections = document.querySelectorAll('.section');
-    if (sections.length === 0) return; // Only show on content pages
-
-    // Dynamically create the search container
-    var container = document.createElement('div');
-    container.className = 'local-search-container';
-    container.innerHTML = '<span class="local-search-icon">🔍</span>' +
-                          '<input type="search" class="local-search-input" id="local-search" placeholder="Search this page (Press /)">';
-    document.body.appendChild(container);
-
-    // Show it
-    container.style.display = 'block';
-
+    var container = document.getElementById('nav-local-search-container');
     var searchInput = document.getElementById('local-search');
+
+    if (sections.length === 0 || !container || !searchInput) return;
+
+    // Show the container in the navbar
+    container.style.display = 'block';
 
     // Global keyboard shortcut (/) to focus local search
     document.addEventListener('keydown', function(e) {
@@ -637,6 +638,17 @@ if (localStorage.getItem('lh_theme') === 'light') {
         e.preventDefault();
         searchInput.focus();
       }
+    });
+
+    // Add focus styling to the navbar search input
+    searchInput.addEventListener('focus', function() {
+      this.style.borderColor = 'var(--accent-cyan)';
+      this.style.boxShadow = '0 0 0 2px rgba(6, 182, 212, 0.2)';
+    });
+
+    searchInput.addEventListener('blur', function() {
+      this.style.borderColor = 'var(--glass-border)';
+      this.style.boxShadow = 'none';
     });
 
     searchInput.addEventListener('input', function() {
