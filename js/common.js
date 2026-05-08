@@ -615,12 +615,32 @@ if (localStorage.getItem('lh_theme') === 'light') {
 
   /* --- Local Search --- */
   function initLocalSearch() {
+    var sections = document.querySelectorAll('.section');
+    if (sections.length === 0) return; // Only show on content pages
+
+    // Dynamically create the search container
+    var container = document.createElement('div');
+    container.className = 'local-search-container';
+    container.innerHTML = '<span class="local-search-icon">🔍</span>' +
+                          '<input type="search" class="local-search-input" id="local-search" placeholder="Search this page (Press /)">';
+    document.body.appendChild(container);
+
+    // Show it
+    container.style.display = 'block';
+
     var searchInput = document.getElementById('local-search');
-    if (!searchInput) return;
+
+    // Global keyboard shortcut (/) to focus local search
+    document.addEventListener('keydown', function(e) {
+      // If pressing '/' and not already in an input/textarea
+      if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        searchInput.focus();
+      }
+    });
 
     searchInput.addEventListener('input', function() {
       var query = this.value.toLowerCase();
-      var sections = document.querySelectorAll('.section');
 
       sections.forEach(function(section) {
         var hasMatch = false;
