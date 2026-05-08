@@ -3,6 +3,11 @@
    Pure vanilla JS, no dependencies
    ============================================ */
 
+// Prevent FOUC for Light Theme
+if (localStorage.getItem('lh_theme') === 'light') {
+  document.body.classList.add('theme-light');
+}
+
 (function () {
   'use strict';
 
@@ -13,7 +18,8 @@
     { name: 'Redis', href: 'redis.html' },
     { name: 'Helm', href: 'helm.html' },
     { name: 'Elasticsearch', href: 'elasticsearch.html' },
-    { name: 'Kafka', href: 'kafka.html' }
+    { name: 'Kafka', href: 'kafka.html' },
+    { name: 'Saved', href: 'saved.html' }
   ];
 
   /* --- Determine active page --- */
@@ -39,6 +45,11 @@
     html += '<span class="nav__search-icon">🔍</span>';
     html += '<span class="nav__search-label">Search...</span>';
     html += '<span class="nav__search-shortcut">⌘K</span>';
+    html += '</button>';
+
+    // Theme toggle button
+    html += '<button class="nav__theme-btn" id="nav-theme-btn" aria-label="Toggle Light/Dark Theme" style="background:transparent; border:none; color:var(--text-primary); cursor:pointer; margin-left:16px; font-size:1.2rem;">';
+    html += document.body.classList.contains('theme-light') ? '🌙' : '☀️';
     html += '</button>';
 
     html += '<button class="nav__toggle" id="nav-toggle" aria-label="Toggle menu">';
@@ -86,6 +97,16 @@
     if (searchBtn) {
       searchBtn.addEventListener('click', function () {
         openSearch();
+      });
+    }
+
+    // Theme toggle click
+    var themeBtn = document.getElementById('nav-theme-btn');
+    if (themeBtn) {
+      themeBtn.addEventListener('click', function () {
+        var isLight = document.body.classList.toggle('theme-light');
+        localStorage.setItem('lh_theme', isLight ? 'light' : 'dark');
+        themeBtn.innerHTML = isLight ? '🌙' : '☀️';
       });
     }
   }
@@ -415,6 +436,147 @@
       '</footer>';
   }
 
+  /* =============================================
+     LOCAL STORAGE INTERACTIVE FEATURES
+     ============================================= */
+
+  window.LearningHubStorage = {
+    // Bookmarks
+    getBookmarks: function() {
+      var data = localStorage.getItem('lh_bookmarks');
+      return data ? JSON.parse(data) : [];
+    },
+    isBookmarked: function(id) {
+      var bookmarks = this.getBookmarks();
+      for (var i = 0; i < bookmarks.length; i++) {
+        if (bookmarks[i].id === id) return true;
+      }
+      return false;
+    },
+    toggleBookmark: function(id, title, contentSnippet, link) {
+      var bookmarks = this.getBookmarks();
+      var exists = false;
+      var newBookmarks = [];
+      
+      for (var i = 0; i < bookmarks.length; i++) {
+        if (bookmarks[i].id === id) exists = true;
+        else newBookmarks.push(bookmarks[i]);
+      }
+      
+      if (!exists) {
+        newBookmarks.push({
+          id: id,
+          title: title,
+          content: contentSnippet,
+          link: link,
+          timestamp: new Date().toISOString()
+        });
+      }
+      
+      localStorage.setItem('lh_bookmarks', JSON.stringify(newBookmarks));
+      return !exists;
+    },
+    
+    // Progress Tracking
+    getProgress: function() {
+      var data = localStorage.getItem('lh_progress');
+      return data ? JSON.parse(data) : {};
+    },
+    isSectionComplete: function(pageId, sectionId) {
+      var prog = this.getProgress();
+      return prog[pageId] && prog[pageId][sectionId] === true;
+    },
+    toggleSectionComplete: function(pageId, sectionId) {
+      var prog = this.getProgress();
+      if (!prog[pageId]) prog[pageId] = {};
+      prog[pageId][sectionId] = !prog[pageId][sectionId];
+      localStorage.setItem('lh_progress', JSON.stringify(prog));
+      return prog[pageId][sectionId];
+    },
+    getTopicProgress: function(pageId, totalSections) {
+      if (!totalSections) return 0;
+      var prog = this.getProgress()[pageId];
+      if (!prog) return 0;
+      var completed = 0;
+      for (var key in prog) {
+        if (prog[key] === true) completed++;
+      }
+      return Math.round((completed / totalSections) * 100);
+    }
+  };
+
+  /* --- Initialize Interactive Buttons --- */
+  function initInteractiveUI() {
+    var pageId = getActivePage().replace('.html', '');
+
+    // Init Bookmarks
+    var bookmarks = document.querySelectorAll('.bookmark-btn');
+    for (var i = 0; i < bookmarks.length; i++) {
+      var btn = bookmarks[i];
+      var id = btn.getAttribute('data-id');
+      if (!id) continue;
+      
+      if (window.LearningHubStorage.isBookmarked(id)) {
+        btn.classList.add('active');
+        btn.innerHTML = '★';
+      } else {
+        btn.innerHTML = '☆';
+      }
+
+      btn.addEventListener('click', function(e) {
+        var button = e.currentTarget;
+        var btnId = button.getAttribute('data-id');
+        var title = button.getAttribute('data-title') || 'Saved Item';
+        var link = window.location.pathname + '#' + (button.closest('section') ? button.closest('section').id : '');
+        
+        // Find nearest text content
+        var contentEl = button.closest('.card') || button.closest('section');
+        var snippet = contentEl ? contentEl.innerText.substring(0, 100) + '...' : '';
+
+        var isNowBookmarked = window.LearningHubStorage.toggleBookmark(btnId, title, snippet, link);
+        if (isNowBookmarked) {
+          button.classList.add('active');
+          button.innerHTML = '★';
+        } else {
+          button.classList.remove('active');
+          button.innerHTML = '☆';
+        }
+      });
+    }
+
+    // Init Progress Buttons
+    var readBtns = document.querySelectorAll('.mark-read-btn');
+    for (var j = 0; j < readBtns.length; j++) {
+      var rbtn = readBtns[j];
+      var secId = rbtn.getAttribute('data-section-id');
+      if (!secId) continue;
+
+      if (window.LearningHubStorage.isSectionComplete(pageId, secId)) {
+        rbtn.classList.add('completed');
+        rbtn.innerHTML = 'Completed';
+        var parentSec = rbtn.closest('section');
+        if (parentSec) parentSec.classList.add('completed');
+      }
+
+      rbtn.addEventListener('click', function(e) {
+        var button = e.currentTarget;
+        var sId = button.getAttribute('data-section-id');
+        var pSec = button.closest('section');
+        
+        var isComp = window.LearningHubStorage.toggleSectionComplete(pageId, sId);
+        if (isComp) {
+          button.classList.add('completed');
+          button.innerHTML = 'Completed';
+          if (pSec) pSec.classList.add('completed');
+        } else {
+          button.classList.remove('completed');
+          button.innerHTML = 'Mark as Completed';
+          if (pSec) pSec.classList.remove('completed');
+        }
+      });
+    }
+  }
+
   /* --- Initialize Everything --- */
   function init() {
     buildOrbs();
@@ -422,6 +584,7 @@
     buildScrollTop();
     buildFooter();
     initCodeCopyButtons();
+    initInteractiveUI();
     setTimeout(initScrollReveal, 100);
   }
 

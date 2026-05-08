@@ -49,6 +49,24 @@
   --nav-height: 64px;
 }
 
+/* --- Light Mode Variables --- */
+body.theme-light {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --bg-surface: rgba(255, 255, 255, 0.7);
+  --bg-surface-hover: rgba(255, 255, 255, 0.9);
+  --bg-code: rgba(15, 23, 42, 0.05);
+
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --text-accent: #6d28d9;
+
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(0, 0, 0, 0.05);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+}
+
 /* --- Reset & Base --- */
 *, *::before, *::after {
   margin: 0;
@@ -1142,4 +1160,100 @@ td code {
   margin-bottom: 6px;
   color: var(--text-secondary);
   line-height: 1.7;
+}
+
+/* --- Interactive Feature Styles --- */
+
+/* Bookmark Button */
+.bookmark-btn {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--text-muted);
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  font-size: 1.1rem;
+}
+.bookmark-btn:hover {
+  background: var(--bg-surface-hover);
+  color: var(--accent-orange);
+  transform: scale(1.1);
+}
+.bookmark-btn.active {
+  color: var(--accent-orange);
+  border-color: var(--accent-orange);
+  background: rgba(245, 158, 11, 0.1);
+}
+
+/* Mark as Read Button */
+.mark-read-btn {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: var(--transition-fast);
+  margin-top: 16px;
+}
+.mark-read-btn:hover {
+  background: var(--bg-surface-hover);
+  border-color: var(--accent-green);
+  color: var(--text-primary);
+}
+.mark-read-btn.completed {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: var(--accent-green);
+  color: var(--accent-green);
+}
+.mark-read-btn.completed::before {
+  content: '✓';
+  font-weight: bold;
+}
+.mark-read-btn:not(.completed)::before {
+  content: '○';
+}
+
+/* Section Completion Styling */
+.section.completed .section__title {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+/* Progress Ring / Bar */
+.topic-progress {
+  margin-top: 16px;
+  width: 100%;
+}
+.topic-progress-bar {
+  height: 6px;
+  background: var(--glass-bg);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  position: relative;
+}
+.topic-progress-fill {
+  height: 100%;
+  background: var(--gradient-accent);
+  width: 0%;
+  transition: width 0.5s ease-out;
+  border-radius: var(--radius-full);
+}
+.topic-progress-text {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  display: block;
+  text-align: right;
 }

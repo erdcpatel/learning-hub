@@ -20,9 +20,10 @@
       </section>
 
       <!-- What is Event Streaming -->
-      <section class="section reveal">
-        <div class="section__header">
+      <section class="section reveal" id="sec-what-is-event-streaming">
+        <div class="section__header" style="display:flex; justify-content:space-between; align-items:center;">
           <h2 class="section__title">1. What is Event Streaming?</h2>
+          <button class="bookmark-btn" data-id="bk-kafka-event-streaming" data-title="Kafka: What is Event Streaming?" title="Save this concept">☆</button>
         </div>
         <div class="card content-card">
           <div class="content-card__body">
@@ -40,15 +41,22 @@
               <li><strong>Timestamp:</strong> When the event occurred</li>
               <li><strong>Headers:</strong> (Optional) Metadata key-value pairs</li>
             </ul>
+            </ul>
           </div>
+        </div>
+        <div style="text-align: center; margin-top: 24px;">
+          <button class="mark-read-btn" data-section-id="sec-what-is-event-streaming">Mark as Completed</button>
         </div>
       </section>
 
       <!-- Architecture Overview -->
-      <section class="section reveal">
-        <div class="section__header">
-          <h2 class="section__title">2. Architecture Overview</h2>
-          <p class="section__subtitle">Understanding how Brokers, Topics, Producers, and Consumers interact.</p>
+      <section class="section reveal" id="sec-architecture">
+        <div class="section__header" style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <h2 class="section__title">2. Architecture Overview</h2>
+            <p class="section__subtitle">Understanding how Brokers, Topics, Producers, and Consumers interact.</p>
+          </div>
+          <button class="bookmark-btn" data-id="bk-kafka-architecture" data-title="Kafka: Architecture Overview" title="Save this concept">☆</button>
         </div>
         
         <div class="card content-card text-center mb-3">
@@ -69,16 +77,21 @@
             <div class="content-card__body">
               <p>Events are organized and durably stored in <strong>Topics</strong>. Think of a topic as a category or feed name. </p>
               <p>Topics in Kafka are multi-producer and multi-subscriber. Events in a topic are not deleted after consumption; instead, Kafka retains them based on a configured time (e.g., 7 days) or size limit.</p>
-            </div>
           </div>
+        </div>
+        <div style="text-align: center; margin-top: 24px;">
+          <button class="mark-read-btn" data-section-id="sec-architecture">Mark as Completed</button>
         </div>
       </section>
 
       <!-- Partitions Deep Dive -->
-      <section class="section reveal">
-        <div class="section__header">
-          <h2 class="section__title">3. Partitions Deep Dive</h2>
-          <p class="section__subtitle">The secret to Kafka's massive scalability and ordered processing.</p>
+      <section class="section reveal" id="sec-partitions">
+        <div class="section__header" style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <h2 class="section__title">3. Partitions Deep Dive</h2>
+            <p class="section__subtitle">The secret to Kafka's massive scalability and ordered processing.</p>
+          </div>
+          <button class="bookmark-btn" data-id="bk-kafka-partitions" data-title="Kafka: Partitions Deep Dive" title="Save this concept">☆</button>
         </div>
 
         <div class="card content-card text-center mb-3">
@@ -106,12 +119,16 @@
             </ul>
           </div>
         </div>
+        <div style="text-align: center; margin-top: 24px;">
+          <button class="mark-read-btn" data-section-id="sec-partitions">Mark as Completed</button>
+        </div>
       </section>
 
       <!-- Producer & Consumer Mechanics -->
-      <section class="section reveal">
-        <div class="section__header">
+      <section class="section reveal" id="sec-producers-consumers">
+        <div class="section__header" style="display:flex; justify-content:space-between; align-items:center;">
           <h2 class="section__title">4. Producers and Consumers</h2>
+          <button class="bookmark-btn" data-id="bk-kafka-producers-consumers" data-title="Kafka: Producers & Consumers" title="Save this concept">☆</button>
         </div>
         
         <div class="topic-grid">
@@ -140,12 +157,16 @@
             </div>
           </div>
         </div>
+        <div style="text-align: center; margin-top: 24px;">
+          <button class="mark-read-btn" data-section-id="sec-producers-consumers">Mark as Completed</button>
+        </div>
       </section>
 
       <!-- Practical Use Cases -->
-      <section class="section reveal">
-        <div class="section__header">
+      <section class="section reveal" id="sec-use-cases">
+        <div class="section__header" style="display:flex; justify-content:space-between; align-items:center;">
           <h2 class="section__title">5. When to Use Kafka</h2>
+          <button class="bookmark-btn" data-id="bk-kafka-use-cases" data-title="Kafka: Use Cases" title="Save this concept">☆</button>
         </div>
         <div class="topic-grid">
           <div class="card content-card">
@@ -165,13 +186,19 @@
             <div class="content-card__body">Decoupling services by using asynchronous, event-driven communication rather than synchronous REST APIs.</div>
           </div>
         </div>
+        <div style="text-align: center; margin-top: 24px;">
+          <button class="mark-read-btn" data-section-id="sec-use-cases">Mark as Completed</button>
+        </div>
       </section>
 
       <!-- Reference: CLI Commands -->
-      <section class="section reveal">
-        <div class="section__header">
-          <h2 class="section__title">Reference: Essential CLI Commands</h2>
-          <p class="section__subtitle">Quick reference for common administrative tasks.</p>
+      <section class="section reveal" id="sec-cli-commands">
+        <div class="section__header" style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <h2 class="section__title">Reference: Essential CLI Commands</h2>
+            <p class="section__subtitle">Quick reference for common administrative tasks.</p>
+          </div>
+          <button class="bookmark-btn" data-id="bk-kafka-cli-commands" data-title="Kafka: CLI Commands" title="Save these commands">☆</button>
         </div>
         <div class="card">
           <div class="table-wrapper">
@@ -187,6 +214,9 @@
               </tbody>
             </table>
           </div>
+        </div>
+        <div style="text-align: center; margin-top: 24px;">
+          <button class="mark-read-btn" data-section-id="sec-cli-commands">Mark as Completed</button>
         </div>
       </section>
 

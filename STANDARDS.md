@@ -158,6 +158,22 @@ var NAV_PAGES = [
 
 ---
 
+## 💾 State Management & Interactive Features
+
+To provide a dynamic learning experience without a backend, we rely purely on `localStorage` through a wrapper object in `common.js`:
+
+### 1. Data Structures
+- **Bookmarks (`lh_bookmarks`)**: An array of objects `[{ id, title, content, link, timestamp }]`.
+- **Progress (`lh_progress`)**: A nested object mapped by page ID and section ID: `{ "kafka": { "sec-architecture": true } }`.
+- **Theme (`lh_theme`)**: A simple string (`light` or `dark`).
+
+### 2. Implementation Rules
+- **No Global Scope Pollution:** All storage logic must live inside `window.LearningHubStorage`.
+- **Graceful Degradation:** Features should gracefully handle disabled `localStorage` or incognito modes.
+- **Performance:** Avoid excessive read/writes. Batch DOM manipulations where possible.
+
+---
+
 ## 🚀 Deployment
 
 ### GitHub Pages Setup

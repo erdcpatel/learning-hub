@@ -56,6 +56,10 @@
             <p class="topic-card__desc">
               Curated prompt library for coding, DevOps, architecture, documentation and learning. Copy-paste ready.
             </p>
+            <div class="topic-progress" data-page="prompts" data-total="0">
+              <div class="topic-progress-bar"><div class="topic-progress-fill"></div></div>
+              <span class="topic-progress-text"></span>
+            </div>
             <span class="topic-card__arrow">Explore prompts →</span>
           </a>
 
@@ -66,6 +70,10 @@
             <p class="topic-card__desc">
               In-memory data store commands, data types, persistence strategies, pub/sub, and caching patterns.
             </p>
+            <div class="topic-progress" data-page="redis" data-total="7">
+              <div class="topic-progress-bar"><div class="topic-progress-fill"></div></div>
+              <span class="topic-progress-text">0%</span>
+            </div>
             <span class="topic-card__arrow">Explore Redis →</span>
           </a>
 
@@ -76,6 +84,10 @@
             <p class="topic-card__desc">
               Kubernetes package manager – chart structure, templating, values, install/upgrade/rollback workflows.
             </p>
+            <div class="topic-progress" data-page="helm" data-total="6">
+              <div class="topic-progress-bar"><div class="topic-progress-fill"></div></div>
+              <span class="topic-progress-text">0%</span>
+            </div>
             <span class="topic-card__arrow">Explore Helm →</span>
           </a>
 
@@ -86,6 +98,10 @@
             <p class="topic-card__desc">
               Full-text search engine – REST API, Query DSL, mappings, aggregations, and index management.
             </p>
+            <div class="topic-progress" data-page="elasticsearch" data-total="6">
+              <div class="topic-progress-bar"><div class="topic-progress-fill"></div></div>
+              <span class="topic-progress-text">0%</span>
+            </div>
             <span class="topic-card__arrow">Explore Elasticsearch →</span>
           </a>
 
@@ -96,6 +112,10 @@
             <p class="topic-card__desc">
               Distributed event streaming – brokers, topics, partitions, consumer groups, and CLI commands.
             </p>
+            <div class="topic-progress" data-page="kafka" data-total="6">
+              <div class="topic-progress-bar"><div class="topic-progress-fill"></div></div>
+              <span class="topic-progress-text">0%</span>
+            </div>
             <span class="topic-card__arrow">Explore Kafka →</span>
           </a>
 
@@ -166,5 +186,29 @@
   <div id="footer-placeholder"></div>
   <script src="js/search-data.js"></script>
   <script src="js/common.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize progress bars
+      if (window.LearningHubStorage) {
+        var progressElements = document.querySelectorAll('.topic-progress');
+        for (var i = 0; i < progressElements.length; i++) {
+          var el = progressElements[i];
+          var pageId = el.getAttribute('data-page');
+          var total = parseInt(el.getAttribute('data-total'), 10);
+          
+          if (total > 0) {
+            var percent = window.LearningHubStorage.getTopicProgress(pageId, total);
+            var fill = el.querySelector('.topic-progress-fill');
+            var text = el.querySelector('.topic-progress-text');
+            
+            if (fill) fill.style.width = percent + '%';
+            if (text) text.innerText = percent + '% Complete';
+          } else {
+            el.style.display = 'none'; // Hide if no sections are available to track
+          }
+        }
+      }
+    });
+  </script>
 </body>
 </html>

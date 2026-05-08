@@ -20,9 +20,10 @@
       </section>
 
       <!-- Core Concepts -->
-      <section class="section reveal">
-        <div class="section__header">
+      <section class="section reveal" id="sec-helm-core">
+        <div class="section__header" style="display:flex; justify-content:space-between; align-items:center;">
           <h2 class="section__title">Core Concepts</h2>
+          <button class="bookmark-btn" data-id="bk-helm-core" data-title="Helm: Core Concepts" title="Save this concept">☆</button>
         </div>
         <div class="topic-grid">
           <div class="card content-card">
@@ -42,12 +43,16 @@
             <div class="content-card__body">Configuration parameters that customize chart behavior. Override defaults via <code>-f values.yaml</code> or <code>--set key=value</code>.</div>
           </div>
         </div>
+        <div style="text-align: center; margin-top: 24px;">
+          <button class="mark-read-btn" data-section-id="sec-helm-core">Mark as Completed</button>
+        </div>
       </section>
 
       <!-- Essential Commands -->
-      <section class="section reveal">
-        <div class="section__header">
+      <section class="section reveal" id="sec-helm-commands">
+        <div class="section__header" style="display:flex; justify-content:space-between; align-items:center;">
           <h2 class="section__title">Essential Commands</h2>
+          <button class="bookmark-btn" data-id="bk-helm-commands" data-title="Helm: Essential Commands" title="Save these commands">☆</button>
         </div>
         <div class="card">
           <div class="table-wrapper">
@@ -73,12 +78,16 @@
             </table>
           </div>
         </div>
+        <div style="text-align: center; margin-top: 24px;">
+          <button class="mark-read-btn" data-section-id="sec-helm-commands">Mark as Completed</button>
+        </div>
       </section>
 
       <!-- Chart Structure -->
-      <section class="section reveal">
-        <div class="section__header">
+      <section class="section reveal" id="sec-helm-structure">
+        <div class="section__header" style="display:flex; justify-content:space-between; align-items:center;">
           <h2 class="section__title">Chart Structure</h2>
+          <button class="bookmark-btn" data-id="bk-helm-structure" data-title="Helm: Chart Structure" title="Save this concept">☆</button>
         </div>
         <div class="card content-card">
           <div class="code-block">
@@ -102,12 +111,16 @@
 └── .helmignore         # Files to exclude from packaging</code></pre>
           </div>
         </div>
+        <div style="text-align: center; margin-top: 24px;">
+          <button class="mark-read-btn" data-section-id="sec-helm-structure">Mark as Completed</button>
+        </div>
       </section>
 
       <!-- Templating -->
-      <section class="section reveal">
-        <div class="section__header">
+      <section class="section reveal" id="sec-helm-templating">
+        <div class="section__header" style="display:flex; justify-content:space-between; align-items:center;">
           <h2 class="section__title">Templating Basics</h2>
+          <button class="bookmark-btn" data-id="bk-helm-templating" data-title="Helm: Templating Basics" title="Save this concept">☆</button>
         </div>
         <div class="topic-grid">
           <div class="card content-card">
@@ -153,12 +166,16 @@ name: {{ include "mychart.fullname" . }}</code></pre></div>
             </div>
           </div>
         </div>
+        <div style="text-align: center; margin-top: 24px;">
+          <button class="mark-read-btn" data-section-id="sec-helm-templating">Mark as Completed</button>
+        </div>
       </section>
 
       <!-- Lifecycle & Hooks -->
-      <section class="section reveal">
-        <div class="section__header">
+      <section class="section reveal" id="sec-helm-lifecycle">
+        <div class="section__header" style="display:flex; justify-content:space-between; align-items:center;">
           <h2 class="section__title">Lifecycle & Hooks</h2>
+          <button class="bookmark-btn" data-id="bk-helm-lifecycle" data-title="Helm: Lifecycle & Hooks" title="Save this concept">☆</button>
         </div>
         <div class="card content-card">
           <div class="table-wrapper">
@@ -177,12 +194,16 @@ name: {{ include "mychart.fullname" . }}</code></pre></div>
             </table>
           </div>
         </div>
+        <div style="text-align: center; margin-top: 24px;">
+          <button class="mark-read-btn" data-section-id="sec-helm-lifecycle">Mark as Completed</button>
+        </div>
       </section>
 
       <!-- Best Practices -->
-      <section class="section reveal">
-        <div class="section__header">
+      <section class="section reveal" id="sec-helm-practices">
+        <div class="section__header" style="display:flex; justify-content:space-between; align-items:center;">
           <h2 class="section__title">Best Practices</h2>
+          <button class="bookmark-btn" data-id="bk-helm-practices" data-title="Helm: Best Practices" title="Save this concept">☆</button>
         </div>
         <div class="topic-grid">
           <div class="card content-card">
@@ -209,6 +230,9 @@ name: {{ include "mychart.fullname" . }}</code></pre></div>
               </ul>
             </div>
           </div>
+        </div>
+        <div style="text-align: center; margin-top: 24px;">
+          <button class="mark-read-btn" data-section-id="sec-helm-practices">Mark as Completed</button>
         </div>
       </section>
 
