@@ -19,6 +19,7 @@ if (localStorage.getItem('lh_theme') === 'light') {
     { name: 'Helm', href: 'helm.html' },
     { name: 'Elasticsearch', href: 'elasticsearch.html' },
     { name: 'Kafka', href: 'kafka.html' },
+    { name: 'Kubernetes', href: 'kubernetes.html' },
     { name: 'Saved', href: 'saved.html' }
   ];
 
@@ -612,6 +613,54 @@ if (localStorage.getItem('lh_theme') === 'light') {
     }
   }
 
+  /* --- Local Search --- */
+  function initLocalSearch() {
+    var searchInput = document.getElementById('local-search');
+    if (!searchInput) return;
+
+    searchInput.addEventListener('input', function() {
+      var query = this.value.toLowerCase();
+      var sections = document.querySelectorAll('.section');
+
+      sections.forEach(function(section) {
+        var hasMatch = false;
+        
+        // Check if the section title itself matches the query
+        var sectionTitle = section.querySelector('.section__title');
+        var titleMatch = sectionTitle && sectionTitle.textContent.toLowerCase().indexOf(query) > -1;
+
+        // Search in cards
+        var cards = section.querySelectorAll('.card');
+        cards.forEach(function(card) {
+          if (titleMatch || card.textContent.toLowerCase().indexOf(query) > -1) {
+            card.style.display = '';
+            hasMatch = true;
+          } else {
+            card.style.display = 'none';
+          }
+        });
+
+        // Search in table rows
+        var rows = section.querySelectorAll('table tbody tr');
+        rows.forEach(function(row) {
+          if (titleMatch || row.textContent.toLowerCase().indexOf(query) > -1) {
+            row.style.display = '';
+            hasMatch = true;
+          } else {
+            row.style.display = 'none';
+          }
+        });
+
+        // Hide section entirely if no match is found
+        if (titleMatch || hasMatch) {
+          section.style.display = '';
+        } else if (cards.length > 0 || rows.length > 0) {
+          section.style.display = 'none';
+        }
+      });
+    });
+  }
+
   /* --- Initialize Everything --- */
   function init() {
     buildOrbs();
@@ -621,6 +670,7 @@ if (localStorage.getItem('lh_theme') === 'light') {
     initCodeCopyButtons();
     initInteractiveUI();
     initAnchorLinks();
+    initLocalSearch();
     setTimeout(initScrollReveal, 100);
   }
 

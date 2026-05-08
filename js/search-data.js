@@ -76,4 +76,10 @@ var SEARCH_INDEX = [
   { page: "kafka.html", pageTitle: "Kafka", section: "Schema Registry", content: "Schema Registry Avro Protobuf JSON Schema schema evolution compatibility backward forward full subject naming strategy serializer deserializer", href: "kafka.html" },
   { page: "kafka.html", pageTitle: "Kafka", section: "Production Best Practices", content: "production replication factor 3 min.insync.replicas 2 acks all unclean.leader.election.enable false retention monitoring lag alerts JMX metrics Burrow consumer lag", href: "kafka.html" },
   { page: "kafka.html", pageTitle: "Kafka", section: "CLI Commands", content: "kafka-topics create list describe delete kafka-console-producer kafka-console-consumer kafka-consumer-groups reset-offsets bootstrap-server", href: "kafka.html" }
+
+  // ===== KUBERNETES =====
+  { page: "kubernetes.html", pageTitle: "Kubernetes", section: "Core Concepts", content: "Update this content to improve search visibility", href: "kubernetes.html#sec-core-concepts" }
+
+  // ===== KUBERNETES =====
+  { page: "kubernetes.html", pageTitle: "Kubernetes", section: "Core Concepts", content: "Update this content to improve search visibility", href: "kubernetes.html#sec-core-concepts" }
 ];

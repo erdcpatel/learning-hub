@@ -245,3 +245,8 @@ open http://localhost:8000
 ## 🤖 AI Agent Instructions
 
 When interacting with this repository via AI coding assistants, agents must refer to the global instructions file located at `AGENTS.md` in the repository root. This file contains specific guardrails and context to ensure AI-generated code adheres to these standards.
+
+### Adding New Content via Agent Skills
+To maintain the structural integrity of the project (Section IDs, Bookmarks, Search), any new pages MUST be added using the included `agentskills.io` compatible skill script:
+1. Run `python skills/add-learning-hub-page/scripts/add_page.py "<Topic Name>" "<Description>"`
+2. This script automates scaffolding, updating the `PAGE_TEMPLATE.html`, injecting into `js/common.js` and `js/search-data.js`, and generating the `index.html` card.

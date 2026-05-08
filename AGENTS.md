@@ -22,12 +22,11 @@ The Learning Hub is a collection of high-quality, pure HTML/CSS/Vanilla JS refer
 
 ## 🧠 Adding New Content
 When asked to add a new topic (e.g., "Docker"):
-1. Copy `PAGE_TEMPLATE.html` to a new file (e.g., `docker.html`).
-2. Update the `<title>`, `<meta description>`, and all placeholder texts.
-3. Update `js/common.js` to include the new page in the `NAV_PAGES` array.
-4. Update `js/search-data.js` to index the new page's key concepts and sections for global search.
-5. Add a card to the `index.html` topic grid.
-6. **Content Hierarchy:** Structure the content conceptually first (What is it? Architecture? Core Concepts?), and place practical reference material (CLI commands, code snippets) at the bottom.
+1. **Always use the Agent Skill:** Execute the provided `skills/add-learning-hub-page` skill script to scaffold the page. 
+   - Command: `python skills/add-learning-hub-page/scripts/add_page.py "Topic Name" "Description"`
+   - This automatically creates the file, updates navigation, initializes search indices, and adds the topic card.
+2. **Content Hierarchy:** Once scaffolded, open the HTML file and structure the content conceptually first (What is it? Architecture? Core Concepts?), and place practical reference material (CLI commands, code snippets) at the bottom.
+3. **Interactive UI Elements:** Ensure every major `<section>` retains a unique `id` and the standard `bookmark-btn` and `mark-read-btn` injected by the template.
 
 ## ⚡ Global Search
 - Global search is powered by `js/search-data.js`.
