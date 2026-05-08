@@ -163,9 +163,8 @@ var NAV_PAGES = [
 ### GitHub Pages Setup
 
 1. Go to repository **Settings → Pages**
-2. Set source to **"Deploy from a branch"**
-3. Select `main` branch, `/` (root) folder
-4. Save
+2. Set source to **"GitHub Actions"**
+3. Save
 
 ### Environment Strategy
 
